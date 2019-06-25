@@ -19,17 +19,6 @@
 #ifndef CU_H
 #define CU_H
 
-#ifndef __dead
-#define __dead __attribute__ ((__noreturn__))
-#endif
-#ifndef __OpenBSD__
-#define pledge(s, p) (0)
-#endif
-/* closefrom.c */
-void		 closefrom(int);
-/* strtonum.c */
-long long	 strtonum(const char *, long long, long long, const char **);
-
 /* command.c */
 void				 do_command(char);
 

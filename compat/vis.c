@@ -37,7 +37,7 @@
 #include <stdio.h>
 
 #include "vis.h"
-#include "cu.h"
+#include "compat.h"
 
 #define	isoctal(c)	(((u_char)(c)) >= '0' && ((u_char)(c)) <= '7')
 #define	isvisible(c,flag)						\

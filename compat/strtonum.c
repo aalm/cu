@@ -22,7 +22,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "cu.h"
+#include "compat.h"
 
 #define INVALID 	1
 #define TOOSMALL 	2
