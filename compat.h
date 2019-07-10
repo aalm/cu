@@ -27,6 +27,14 @@
 #include <termios.h>
 #include <wchar.h>
 
+#ifndef DEFAULT_BAUDRATE
+#define	DEFAULT_BAUDRATE	9600
+#endif
+
+#ifndef DEFAULT_LINEPATH
+#define	DEFAULT_LINEPATH	"/dev/tty00"
+#endif
+
 #ifndef __GNUC__
 #define __attribute__(a)
 #endif

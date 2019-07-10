@@ -3,7 +3,6 @@
 AC_INIT([cu], next-3.1)
 AC_PREREQ([2.60])
 
-#AC_CONFIG_AUX_DIR(etc)
 AC_CONFIG_LIBOBJ_DIR(compat)
 AM_INIT_AUTOMAKE([foreign subdir-objects])
 
@@ -121,7 +120,7 @@ else
 	AC_LIBOBJ(err)
 fi
 
-# Look for stravis, compat/{vis,unvis}.c used if missing.
+# Look for stravis, compat/vis.c used if missing.
 AC_CHECK_FUNC(stravis, found_stravis=yes, found_stravis=no)
 if test "x$found_stravis" = xyes; then
 	AC_MSG_CHECKING(if strnvis is broken)
@@ -148,7 +147,6 @@ if test "x$found_stravis" = xyes; then
 	AC_DEFINE(HAVE_VIS)
 else
 	AC_LIBOBJ(vis)
-#	AC_LIBOBJ(unvis)
 fi
 
 # Look for getopt. glibc's getopt does not enforce argument order and the ways
@@ -236,27 +234,27 @@ else
 	AC_MSG_RESULT(no)
 fi
 
-# Man page defaults to mdoc.
-MANFORMAT=mdoc
-AC_SUBST(MANFORMAT)
-
 # Figure out the platform.
 AC_MSG_CHECKING(platform)
 case "$host_os" in
 	*linux*)
 		AC_MSG_RESULT(linux)
+		AC_DEFINE(DEFAULT_LINEPATH, "/dev/ttyS0")
 		PLATFORM=linux
 		;;
 	*netbsd*)
 		AC_MSG_RESULT(netbsd)
+		AC_DEFINE(DEFAULT_LINEPATH, "/dev/dty00")
 		PLATFORM=netbsd
 		;;
 	*openbsd*)
 		AC_MSG_RESULT(openbsd)
+		AC_DEFINE(DEFAULT_LINEPATH, "/dev/cua00")
 		PLATFORM=openbsd
 		;;
 	*)
 		AC_MSG_RESULT(unknown)
+		AC_DEFINE(DEFAULT_LINEPATH, "/dev/tty00")
 		PLATFORM=unknown
 		;;
 esac

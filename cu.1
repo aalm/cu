@@ -40,7 +40,7 @@
 .Op Fl l Ar line
 .Op Fl s Ar speed | Fl Ar speed
 .Nm
-.Op Ar host
+.Op Ar line
 .Sh DESCRIPTION
 .Nm
 is used to connect to another system over a serial link.
@@ -61,20 +61,15 @@ Specify an escape character to use instead of the default tilde.
 .It Fl l Ar line
 Specify the line to use.
 Either of the forms like
-.Pa cua00
+.Pa @DEFLINEU@
 or
-.Pa /dev/cua00
+.Pa /dev/@DEFLINEU@
 are permitted.
 The default is
-.Pa /dev/cua00 .
+.Pa /dev/@DEFLINEU@ .
 See
-.Xr cua 4
+.Xr @DEFLINE@ 4
 for information on terminal devices.
-Users in group
-.Dq dialer
-are permitted to use
-.Xr cua 4
-devices by default.
 .It Fl r
 Start
 .Nm
@@ -96,22 +91,6 @@ and
 Set the speed of the connection.
 The default is 9600.
 .El
-.Pp
-If
-.Ar host
-is given,
-.Nm
-uses the
-.Xr remote 5
-database to retrieve the
-.Sy dc Pq directly connected ,
-.Sy dv Pq device
-and
-.Sy br Pq baud rate
-capabilities for that host.
-The
-.Nm
-utility ignores other capabilities found in that database.
 .Pp
 Typed characters are normally transmitted directly to the remote
 machine (which does the echoing as well).
@@ -177,25 +156,14 @@ dialogue and return the user to the remote machine.
 guards against multiple users connecting to a remote system by opening
 modems and terminal lines with exclusive access.
 .Sh ENVIRONMENT
-.Bl -tag -width REMOTEXXX
+.Bl -tag -width LINEXXX
 .It Ev HOST
 The default value for
-.Ar host
+.Ar line
 if none is specified via the command line.
-.It Ev REMOTE
-A system description, or an absolute path to a
-.Xr remote 5
-system description database.
-.El
-.Sh FILES
-.Bl -tag -width /etc/remote
-.It Pa /etc/remote
-host description file
 .El
 .Sh EXIT STATUS
 .Ex -std cu
-.Sh SEE ALSO
-.Xr remote 5
 .Sh HISTORY
 The
 .Nm

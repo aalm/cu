@@ -62,14 +62,18 @@ void		stream_read(struct bufferevent *, void *);
 void		stream_error(struct bufferevent *, short, void *);
 void		line_read(struct bufferevent *, void *);
 void		line_error(struct bufferevent *, short, void *);
+#if 0
 void		try_remote(const char *, const char *, const char *);
+#endif
 
 __dead void
 usage(void)
 {
 	fprintf(stderr, "usage: %s [-dr] [-E escape_char] [-l line] "
 	    "[-s speed | -speed]\n", getprogname());
-	fprintf(stderr, "       %s [host]\n", getprogname());
+	fprintf(stderr, "       %s [line]\n", getprogname());
+	fprintf(stderr, "default line: %s, speed: %d\n", DEFAULT_LINEPATH,
+	    DEFAULT_BAUDRATE);
 	exit(1);
 }
 
@@ -148,6 +152,7 @@ main(int argc, char **argv)
 		if (host != NULL && *host != '\0') {
 			if (*host == '/')
 				line_path = host;
+#if 0
 			else {
 				s = getenv("REMOTE");
 				if (s != NULL && *s == '/')
@@ -155,13 +160,14 @@ main(int argc, char **argv)
 				else
 					try_remote(host, NULL, s);
 			}
+#endif
 		}
 	}
 
 	if (line_path == NULL)
-		line_path = "/dev/cua00";
+		line_path = DEFAULT_LINEPATH;
 	if (line_speed == -1)
-		line_speed = 9600;
+		line_speed = DEFAULT_BAUDRATE;
 	if (is_direct == -1)
 		is_direct = 0;
 
@@ -370,10 +376,10 @@ line_error(struct bufferevent *bufev, short what, void *data)
 	event_loopexit(NULL);
 }
 
+#if 0
 void
 try_remote(const char *host, const char *path, const char *entry)
 {
-#if 0
 	const char	*paths[] = { "/etc/remote", NULL, NULL };
 	char		*cp, *s;
 	long		 l;
@@ -415,8 +421,8 @@ try_remote(const char *host, const char *path, const char *entry)
 			cu_errx(1, "speed out of range");
 		line_speed = l;
 	}
-#endif
 }
+#endif
 
 /* Expands tildes in the file name. Based on code from ssh/misc.c. */
 char *

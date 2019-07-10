@@ -2,12 +2,12 @@
 
 # Obvious program stuff.
 bin_PROGRAMS = cu
-CLEANFILES = cu.1.mdoc cu.1.man
+CLEANFILES = cu.1.tmp
 
 # Distribution tarball options.
 EXTRA_DIST = \
 	compat/*.[ch] \
-	mdoc2man.awk cu.1
+	cu.1
 #EXTRA_DIST += osdep-*.c
 
 # Additional object files.
@@ -46,14 +46,32 @@ dist_cu_SOURCES = \
 #nodist_cu_SOURCES = osdep-@PLATFORM@.c
 
 # Install cu.1 in the right format.
+if IS_LINUX
 install-exec-hook:
-	if test x@MANFORMAT@ = xmdoc; then \
-		sed -e "s|@SYSCONFDIR@|$(sysconfdir)|g" $(srcdir)/cu.1 \
-			>$(srcdir)/cu.1.mdoc; \
-	else \
-		sed -e "s|@SYSCONFDIR@|$(sysconfdir)|g" $(srcdir)/cu.1| \
-			$(AWK) -f $(srcdir)/mdoc2man.awk >$(srcdir)/cu.1.man; \
-	fi
+	sed -e "s|@DEFLINE@|ttyS|g" -e "s|@DEFLINEU@|ttyS0|g" \
+		$(srcdir)/cu.1 >$(srcdir)/cu.1.tmp
 	$(mkdir_p) $(DESTDIR)$(mandir)/man1
-	$(INSTALL_DATA) $(srcdir)/cu.1.@MANFORMAT@ \
-		$(DESTDIR)$(mandir)/man1/cu.1
+	$(INSTALL_DATA) $(srcdir)/cu.1.tmp $(DESTDIR)$(mandir)/man1/cu.1
+else
+if IS_NETBSD
+install-exec-hook:
+	sed -e "s|@DEFLINE@|dty|g" -e "s|@DEFLINEU@|dty00|g" \
+		$(srcdir)/cu.1 >$(srcdir)/cu.1.tmp
+	$(mkdir_p) $(DESTDIR)$(mandir)/man1
+	$(INSTALL_DATA) $(srcdir)/cu.1.tmp $(DESTDIR)$(mandir)/man1/cu.1
+else
+if IS_OPENBSD
+install-exec-hook:
+	sed -e "s|@DEFLINE@|cua|g" -e "s|@DEFLINEU@|cua00|g" \
+		$(srcdir)/cu.1 >$(srcdir)/cu.1.tmp
+	$(mkdir_p) $(DESTDIR)$(mandir)/man1
+	$(INSTALL_DATA) $(srcdir)/cu.1.tmp $(DESTDIR)$(mandir)/man1/cu.1
+else
+install-exec-hook:
+	sed -e "s|@DEFLINE@|tty|g" -e "s|@DEFLINEU@|tty00|g" \
+		$(srcdir)/cu.1 >$(srcdir)/cu.1.tmp
+	$(mkdir_p) $(DESTDIR)$(mandir)/man1
+	$(INSTALL_DATA) $(srcdir)/cu.1.tmp $(DESTDIR)$(mandir)/man1/cu.1
+endif
+endif
+endif
